@@ -25,12 +25,12 @@ export interface UserProfile {
 
 export class ArkivOmegle {
   private walletClient;
-  public publicClient;
+  public publicClient: ReturnType<typeof createPublicClient>;
   private account;
   private userId: string;
 
   constructor() {
-    this.account = privateKeyToAccount(config.privateKey);
+    this.account = privateKeyToAccount(config.privateKey as `0x${string}`);
     this.userId = `user-${this.account.address.slice(0, 10)}`;
     
     this.walletClient = createWalletClient({
@@ -187,8 +187,11 @@ export class ArkivOmegle {
       eq('status', 'waiting'),
     ];
 
-    const result = await query
-      .where(and(...conditions))
+    let queryBuilder = query;
+    for (const condition of conditions) {
+      queryBuilder = queryBuilder.where(condition);
+    }
+    const result = await queryBuilder
       .withAttributes(true)
       .withPayload(true)
       .fetch();
@@ -206,13 +209,13 @@ export class ArkivOmegle {
           continue;
         }
 
-        const data = entity.toJSON();
+        const data = entity.toJson();
         users.push({
-          userId: attrs.userId,
-          address: attrs.address,
+          userId: String(attrs.userId),
+          address: String(attrs.address),
           status: attrs.status as any,
           interests: data.interests,
-          createdAt: parseInt(attrs.createdAt || '0', 10),
+          createdAt: parseInt(String(attrs.createdAt || '0'), 10),
         });
       } catch (error) {
         console.error('Error parsing user profile:', error);
@@ -245,8 +248,11 @@ export class ArkivOmegle {
       conditions.push(eq('status', filters.status));
     }
 
-    const result = await query
-      .where(and(...conditions))
+    let queryBuilder = query;
+    for (const condition of conditions) {
+      queryBuilder = queryBuilder.where(condition);
+    }
+    const result = await queryBuilder
       .withAttributes(true)
       .withPayload(true)
       .fetch();
@@ -262,20 +268,20 @@ export class ArkivOmegle {
 
         // Skip expired waiting sessions
         if (attrs.status === 'waiting') {
-          const expiresAt = parseInt(attrs.expiresAt || '0', 10);
+          const expiresAt = parseInt(String(attrs.expiresAt || '0'), 10);
           if (expiresAt < now) {
             continue;
           }
         }
 
-        const data = entity.toJSON();
+        const data = entity.toJson();
         sessions.push({
-          sessionId: attrs.sessionId,
-          user1: attrs.user1,
-          user2: attrs.user2 || '',
+          sessionId: String(attrs.sessionId),
+          user1: String(attrs.user1),
+          user2: String(attrs.user2 || ''),
           status: attrs.status as any,
-          createdAt: parseInt(attrs.createdAt || '0', 10),
-          expiresAt: parseInt(attrs.expiresAt || '0', 10),
+          createdAt: parseInt(String(attrs.createdAt || '0'), 10),
+          expiresAt: parseInt(String(attrs.expiresAt || '0'), 10),
           interests: data.interests,
         });
       } catch (error) {
@@ -299,20 +305,20 @@ export class ArkivOmegle {
     const stop = await this.publicClient.subscribeEntityEvents({
       onEntityCreated: async (e) => {
         try {
-          const entity = await this.publicClient.getEntity(e.entityKey);
+          const entity = await this.publicClient.getEntity(e.entityKey as `0x${string}`);
           const attrs = Object.fromEntries(
             entity.attributes.map(a => [a.key, a.value])
           );
 
           if (attrs.type === 'chat-session') {
-            const data = entity.toJSON();
+            const data = entity.toJson();
             const session: ChatSession = {
-              sessionId: attrs.sessionId,
-              user1: attrs.user1,
-              user2: attrs.user2 || '',
+              sessionId: String(attrs.sessionId),
+              user1: String(attrs.user1),
+              user2: String(attrs.user2 || ''),
               status: attrs.status as any,
-              createdAt: parseInt(attrs.createdAt || '0', 10),
-              expiresAt: parseInt(attrs.expiresAt || '0', 10),
+              createdAt: parseInt(String(attrs.createdAt || '0'), 10),
+              expiresAt: parseInt(String(attrs.expiresAt || '0'), 10),
               interests: data.interests,
             };
 
@@ -322,13 +328,13 @@ export class ArkivOmegle {
               callbacks.onSessionEnded?.(session.sessionId);
             }
           } else if (attrs.type === 'user-profile' && attrs.status === 'waiting' && attrs.userId !== this.userId) {
-            const data = entity.toJSON();
+            const data = entity.toJson();
             callbacks.onUserWaiting?.({
-              userId: attrs.userId,
-              address: attrs.address,
+              userId: String(attrs.userId),
+              address: String(attrs.address),
               status: 'waiting',
               interests: data.interests,
-              createdAt: parseInt(attrs.createdAt || '0', 10),
+              createdAt: parseInt(String(attrs.createdAt || '0'), 10),
             });
           }
         } catch (err) {

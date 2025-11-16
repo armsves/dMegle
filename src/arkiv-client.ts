@@ -37,7 +37,7 @@ export class ArkivTaskBoard {
   private account;
 
   constructor() {
-    this.account = privateKeyToAccount(config.privateKey);
+    this.account = privateKeyToAccount(config.privateKey as `0x${string}`);
     
     this.walletClient = createWalletClient({
       chain: mendoza,
@@ -148,7 +148,7 @@ export class ArkivTaskBoard {
     }
 
     const { txHash } = await this.walletClient.extendEntity({
-      entityKey,
+      entityKey: entityKey as `0x${string}`,
       expiresIn: additionalSeconds,
     });
 
@@ -160,7 +160,7 @@ export class ArkivTaskBoard {
    */
   async getTask(entityKey: string): Promise<Task | null> {
     try {
-      const entity = await this.publicClient.getEntity(entityKey);
+      const entity = await this.publicClient.getEntity(entityKey as `0x${string}`);
       const attrs = Object.fromEntries(
         entity.attributes.map(a => [a.key, a.value])
       );
@@ -169,17 +169,17 @@ export class ArkivTaskBoard {
         return null;
       }
 
-      const data = entity.toJSON();
+      const data = entity.toJson();
       return {
-        entityKey,
+        entityKey: entity.key,
         title: data.title,
         description: data.description,
         status: attrs.status as 'todo' | 'in-progress' | 'done',
-        assignee: attrs.assignee,
-        priority: parseInt(attrs.priority || '1', 10),
-        createdAt: parseInt(attrs.createdAt || '0', 10),
-        expiresAt: parseInt(attrs.expiresAt || '0', 10),
-        expiresIn: Math.max(0, Math.floor((parseInt(attrs.expiresAt || '0', 10) - Date.now()) / 1000)),
+        assignee: String(attrs.assignee),
+        priority: parseInt(String(attrs.priority || '1'), 10),
+        createdAt: parseInt(String(attrs.createdAt || '0'), 10),
+        expiresAt: parseInt(String(attrs.expiresAt || '0'), 10),
+        expiresIn: Math.max(0, Math.floor((parseInt(String(attrs.expiresAt || '0'), 10) - Date.now()) / 1000)),
       };
     } catch (error) {
       return null;
@@ -215,8 +215,11 @@ export class ArkivTaskBoard {
       conditions.push(gt('expiresAt', String(now)));
     }
 
-    const result = await query
-      .where(conditions.length > 1 ? and(...conditions) : conditions[0])
+    let queryBuilder = query;
+    for (const condition of conditions) {
+      queryBuilder = queryBuilder.where(condition);
+    }
+    const result = await queryBuilder
       .withAttributes(true)
       .withPayload(true)
       .fetch();
@@ -231,20 +234,20 @@ export class ArkivTaskBoard {
         );
 
         // Skip if expired and activeOnly is true
-        const expiresAt = parseInt(attrs.expiresAt || '0', 10);
+        const expiresAt = parseInt(String(attrs.expiresAt || '0'), 10);
         if (filters?.activeOnly && expiresAt < now) {
           continue;
         }
 
-        const data = entity.toJSON();
+        const data = entity.toJson();
         tasks.push({
-          entityKey: entity.entityKey,
+          entityKey: entity.key,
           title: data.title,
           description: data.description,
           status: attrs.status as 'todo' | 'in-progress' | 'done',
-          assignee: attrs.assignee,
-          priority: parseInt(attrs.priority || '1', 10),
-          createdAt: parseInt(attrs.createdAt || '0', 10),
+          assignee: String(attrs.assignee),
+          priority: parseInt(String(attrs.priority || '1'), 10),
+          createdAt: parseInt(String(attrs.createdAt || '0'), 10),
           expiresAt,
           expiresIn: Math.max(0, Math.floor((expiresAt - now) / 1000)),
         });

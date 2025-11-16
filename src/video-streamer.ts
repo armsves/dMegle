@@ -28,11 +28,11 @@ export interface VideoStream {
 
 export class ArkivVideoStreamer {
   private walletClient;
-  public publicClient; // Expose for server subscriptions
+  public publicClient: ReturnType<typeof createPublicClient>; // Expose for server subscriptions
   private account;
 
   constructor() {
-    this.account = privateKeyToAccount(config.privateKey);
+    this.account = privateKeyToAccount(config.privateKey as `0x${string}`);
     
     this.walletClient = createWalletClient({
       chain: mendoza,
@@ -191,18 +191,18 @@ export class ArkivVideoStreamer {
           );
 
           if (attrs.type === 'video-chunk' && (streamId === '*' || attrs.streamId === streamId)) {
-            const chunkIndex = parseInt(attrs.chunkIndex || '0', 10);
+            const chunkIndex = parseInt(String(attrs.chunkIndex || '0'), 10);
             
             if (!receivedChunks.has(chunkIndex)) {
               receivedChunks.add(chunkIndex);
               
-              const data = entity.toJSON();
+              const data = entity.toJson();
               const chunk: VideoChunk = {
                 entityKey: e.entityKey,
-                streamId: attrs.streamId,
+                streamId: String(attrs.streamId),
                 chunkIndex,
                 data: data.data, // base64 data
-                timestamp: parseInt(attrs.timestamp || '0', 10),
+                timestamp: parseInt(String(attrs.timestamp || '0'), 10),
                 expiresAt: Date.now() + 3600000, // Approximate
               };
 
@@ -237,7 +237,8 @@ export class ArkivVideoStreamer {
     try {
       const query = this.publicClient.buildQuery();
       const result = await query
-        .where(and(eq('type', 'video-chunk'), eq('streamId', streamId)))
+        .where(eq('type', 'video-chunk'))
+        .where(eq('streamId', String(streamId)))
         .withAttributes(true)
         .withPayload(true)
         .fetch();
@@ -250,19 +251,19 @@ export class ArkivVideoStreamer {
           entity.attributes.map(a => [a.key, a.value])
         );
 
-        const chunkIndex = parseInt(attrs.chunkIndex || '0', 10);
+        const chunkIndex = parseInt(String(attrs.chunkIndex || '0'), 10);
         
         // Apply index filters if provided
         if (startIndex !== undefined && chunkIndex < startIndex) continue;
         if (endIndex !== undefined && chunkIndex > endIndex) continue;
 
-        const data = entity.toJSON();
+        const data = entity.toJson();
         chunks.push({
-          entityKey: entity.entityKey,
-          streamId: attrs.streamId,
+          entityKey: entity.key,
+          streamId: String(attrs.streamId),
           chunkIndex,
           data: data.data,
-          timestamp: parseInt(attrs.timestamp || '0', 10),
+          timestamp: parseInt(String(attrs.timestamp || '0'), 10),
           expiresAt: Date.now() + 3600000, // Approximate
         });
       } catch (error) {
@@ -285,7 +286,8 @@ export class ArkivVideoStreamer {
     try {
       const query = this.publicClient.buildQuery();
       const result = await query
-        .where(and(eq('type', 'video-stream'), eq('streamId', streamId)))
+        .where(eq('type', 'video-stream'))
+        .where(eq('streamId', String(streamId)))
         .withAttributes(true)
         .withPayload(true)
         .fetch();
@@ -295,7 +297,7 @@ export class ArkivVideoStreamer {
       }
 
       const entity = result.entities[0];
-      const data = entity.toJSON() as VideoStream;
+      const data = entity.toJson() as VideoStream;
       return data;
     } catch (error) {
       console.error('Error getting stream:', error);

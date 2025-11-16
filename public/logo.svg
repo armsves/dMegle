@@ -1,0 +1,64 @@
+<svg width="400" height="120" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradient for the icon -->
+    <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Gradient for text -->
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Blockchain network nodes (background pattern) -->
+  <g opacity="0.3">
+    <circle cx="30" cy="30" r="3" fill="url(#iconGradient)"/>
+    <circle cx="50" cy="20" r="3" fill="url(#iconGradient)"/>
+    <circle cx="70" cy="30" r="3" fill="url(#iconGradient)"/>
+    <circle cx="40" cy="50" r="3" fill="url(#iconGradient)"/>
+    <circle cx="60" cy="50" r="3" fill="url(#iconGradient)"/>
+    <line x1="30" y1="30" x2="50" y2="20" stroke="url(#iconGradient)" stroke-width="1.5"/>
+    <line x1="50" y1="20" x2="70" y2="30" stroke="url(#iconGradient)" stroke-width="1.5"/>
+    <line x1="30" y1="30" x2="40" y2="50" stroke="url(#iconGradient)" stroke-width="1.5"/>
+    <line x1="70" y1="30" x2="60" y2="50" stroke="url(#iconGradient)" stroke-width="1.5"/>
+    <line x1="40" y1="50" x2="60" y2="50" stroke="url(#iconGradient)" stroke-width="1.5"/>
+  </g>
+  
+  <!-- Main camera/video icon -->
+  <g transform="translate(20, 35)">
+    <!-- Camera body -->
+    <rect x="0" y="5" width="60" height="40" rx="6" fill="url(#iconGradient)" opacity="0.9"/>
+    
+    <!-- Lens -->
+    <circle cx="20" cy="25" r="12" fill="none" stroke="white" stroke-width="3"/>
+    <circle cx="20" cy="25" r="8" fill="white" opacity="0.8"/>
+    
+    <!-- Recording indicator -->
+    <circle cx="48" cy="15" r="4" fill="#EF4444">
+      <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- Blockchain link -->
+    <path d="M 55 25 L 75 25 M 70 20 L 75 25 L 70 30" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    
+    <!-- Blockchain block -->
+    <rect x="75" y="15" width="20" height="20" rx="3" fill="white" opacity="0.9"/>
+    <line x1="78" y1="20" x2="92" y2="20" stroke="url(#iconGradient)" stroke-width="2"/>
+    <line x1="78" y1="25" x2="92" y2="25" stroke="url(#iconGradient)" stroke-width="2"/>
+    <line x1="78" y1="30" x2="92" y2="30" stroke="url(#iconGradient)" stroke-width="2"/>
+  </g>
+  
+  <!-- Text: dMegle -->
+  <text x="130" y="70" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="url(#textGradient)">
+    dMegle
+  </text>
+  
+  <!-- Tagline -->
+  <text x="132" y="90" font-family="Arial, sans-serif" font-size="14" fill="#6B7280">
+    Decentralized Live Streaming
+  </text>
+</svg>
+

@@ -46,13 +46,13 @@ const setupGlobalSubscription = async () => {
         );
 
         if (attrs.type === 'video-chunk') {
-          const chunkIndex = parseInt(attrs.chunkIndex || '0', 10);
+          const chunkIndex = parseInt(String(attrs.chunkIndex || '0'), 10);
           console.log(`[Chunk Received] Stream: ${attrs.streamId}, Index: ${chunkIndex}`);
           broadcast({
             type: 'chunk:received',
             streamId: attrs.streamId,
             chunkIndex,
-            timestamp: parseInt(attrs.timestamp || '0', 10),
+            timestamp: parseInt(String(attrs.timestamp || '0'), 10),
           });
         }
       } catch (error: any) {

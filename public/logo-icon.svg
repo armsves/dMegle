@@ -1,0 +1,56 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="60" cy="60" r="55" fill="url(#iconGradient)" opacity="0.1"/>
+  
+  <!-- Blockchain network nodes (background pattern) -->
+  <g opacity="0.3">
+    <circle cx="30" cy="30" r="4" fill="url(#iconGradient)"/>
+    <circle cx="55" cy="20" r="4" fill="url(#iconGradient)"/>
+    <circle cx="80" cy="30" r="4" fill="url(#iconGradient)"/>
+    <circle cx="35" cy="55" r="4" fill="url(#iconGradient)"/>
+    <circle cx="75" cy="55" r="4" fill="url(#iconGradient)"/>
+    <circle cx="30" cy="80" r="4" fill="url(#iconGradient)"/>
+    <circle cx="80" cy="80" r="4" fill="url(#iconGradient)"/>
+    <line x1="30" y1="30" x2="55" y2="20" stroke="url(#iconGradient)" stroke-width="2"/>
+    <line x1="55" y1="20" x2="80" y2="30" stroke="url(#iconGradient)" stroke-width="2"/>
+    <line x1="30" y1="30" x2="35" y2="55" stroke="url(#iconGradient)" stroke-width="2"/>
+    <line x1="80" y1="30" x2="75" y2="55" stroke="url(#iconGradient)" stroke-width="2"/>
+    <line x1="35" y1="55" x2="75" y2="55" stroke="url(#iconGradient)" stroke-width="2"/>
+    <line x1="30" y1="80" x2="35" y2="55" stroke="url(#iconGradient)" stroke-width="2"/>
+    <line x1="80" y1="80" x2="75" y2="55" stroke="url(#iconGradient)" stroke-width="2"/>
+  </g>
+  
+  <!-- Main camera/video icon -->
+  <g transform="translate(25, 40)">
+    <!-- Camera body -->
+    <rect x="0" y="0" width="70" height="45" rx="8" fill="url(#iconGradient)" opacity="1"/>
+    
+    <!-- Lens -->
+    <circle cx="25" cy="22.5" r="14" fill="none" stroke="white" stroke-width="3.5"/>
+    <circle cx="25" cy="22.5" r="9" fill="white" opacity="0.9"/>
+    
+    <!-- Recording indicator -->
+    <circle cx="58" cy="10" r="5" fill="#EF4444">
+      <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Blockchain connection -->
+  <g transform="translate(55, 62)">
+    <path d="M 0 0 L 0 15" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+    
+    <!-- Blockchain block -->
+    <rect x="-12" y="15" width="24" height="24" rx="4" fill="white" opacity="0.95"/>
+    <line x1="-8" y1="21" x2="8" y2="21" stroke="url(#iconGradient)" stroke-width="2.5"/>
+    <line x1="-8" y1="27" x2="8" y2="27" stroke="url(#iconGradient)" stroke-width="2.5"/>
+    <line x1="-8" y1="33" x2="8" y2="33" stroke="url(#iconGradient)" stroke-width="2.5"/>
+  </g>
+</svg>
+
