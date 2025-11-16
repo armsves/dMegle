@@ -1,3 +1,6 @@
+// Import error suppression first to suppress expected block range errors
+import '../suppress-errors.js';
+
 import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';

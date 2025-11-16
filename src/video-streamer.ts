@@ -96,6 +96,7 @@ export class ArkivVideoStreamer {
     const base64Data = chunkData.toString('base64');
     
     if (base64Data.length > 50000) {
+      console.error(`⚠️ Chunk too large: ${base64Data.length} bytes. Max ~50KB base64.`);
       throw new Error(`Chunk too large: ${base64Data.length} bytes. Max ~50KB base64.`);
     }
 
@@ -138,9 +139,9 @@ export class ArkivVideoStreamer {
     // In production, you'd use ffmpeg or similar to extract video chunks
     const videoBuffer = readFileSync(videoFilePath);
     
-    // Simple chunking: split buffer into ~50KB chunks
-    // In real implementation, use ffmpeg to extract actual video segments
-    const chunkSizeBytes = 40000; // ~40KB raw = ~50KB base64
+    // Simple chunking: split buffer into smaller chunks to ensure base64 stays under 50KB
+    // Base64 encoding increases size by ~33%, so 37KB raw = ~49KB base64 (safe margin)
+    const chunkSizeBytes = 37000; // ~37KB raw = ~49KB base64 (under 50KB limit)
     let chunkIndex = 0;
 
     console.log(`📹 Starting video stream: ${streamId}`);
@@ -215,13 +216,21 @@ export class ArkivVideoStreamer {
             }
           }
         } catch (err) {
-          callbacks.onError?.(err as Error);
+          // Silently ignore block range errors
+          const errorMsg = (err as Error)?.message || String(err);
+          if (!errorMsg.includes('exceed max block range') && 
+              !errorMsg.includes('max block range params') && 
+              !errorMsg.includes('InvalidInputRpcError')) {
+            callbacks.onError?.(err as Error);
+          }
         }
       },
       onError: (err) => {
         // Filter out block range errors - subscriptions still work for new events
         const errorMsg = err?.message || String(err);
-        if (!errorMsg.includes('exceed max block range') && !errorMsg.includes('max block range params')) {
+        if (!errorMsg.includes('exceed max block range') && 
+            !errorMsg.includes('max block range params') && 
+            !errorMsg.includes('InvalidInputRpcError')) {
           callbacks.onError?.(err as Error);
         }
       },

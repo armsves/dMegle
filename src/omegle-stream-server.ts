@@ -1,3 +1,6 @@
+// Import error suppression first to suppress expected block range errors
+import '../suppress-errors.js';
+
 import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
@@ -439,7 +442,8 @@ wss.on('connection', (ws) => {
 });
 
 const PORT = config.port;
-server.listen(PORT, () => {
+const HOST = process.env.HOST || '0.0.0.0';
+server.listen(PORT, HOST, () => {
   console.log(`🚀 Arkiv Stream Server running on http://localhost:${PORT}`);
   console.log(`📡 Streamer: http://localhost:${PORT}/stream`);
   console.log(`👀 Viewer: http://localhost:${PORT}/watch`);

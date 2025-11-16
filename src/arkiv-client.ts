@@ -285,7 +285,13 @@ export class ArkivTaskBoard {
             }
           }
         } catch (err) {
-          callbacks.onError?.(err as Error);
+          // Silently ignore block range errors
+          const errorMsg = (err as Error)?.message || String(err);
+          if (!errorMsg.includes('exceed max block range') && 
+              !errorMsg.includes('max block range params') &&
+              !errorMsg.includes('InvalidInputRpcError')) {
+            callbacks.onError?.(err as Error);
+          }
         }
       },
       onEntityExpiresInExtended: (e) => {

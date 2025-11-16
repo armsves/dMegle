@@ -1,3 +1,6 @@
+// Import error suppression first to suppress expected block range errors
+import '../suppress-errors.js';
+
 import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
@@ -56,14 +59,22 @@ const setupGlobalSubscription = async () => {
           });
         }
       } catch (error: any) {
-        console.error('[Subscription Error]', error);
-        broadcast({ type: 'error', message: error.message });
+        // Silently ignore block range errors
+        const errorMsg = error?.message || String(error);
+        if (!errorMsg.includes('exceed max block range') && 
+            !errorMsg.includes('max block range params') && 
+            !errorMsg.includes('InvalidInputRpcError')) {
+          console.error('[Subscription Error]', error);
+          broadcast({ type: 'error', message: errorMsg });
+        }
       }
     },
     onError: (error) => {
       // Filter out block range errors - subscriptions still work for new events
       const errorMsg = error?.message || String(error);
-      if (!errorMsg.includes('exceed max block range') && !errorMsg.includes('max block range params')) {
+      if (!errorMsg.includes('exceed max block range') && 
+          !errorMsg.includes('max block range params') && 
+          !errorMsg.includes('InvalidInputRpcError')) {
         console.error('[Subscription Error]', error);
         broadcast({ type: 'error', message: errorMsg });
       }
@@ -82,11 +93,14 @@ setupGlobalSubscription()
   })
   .catch((error: any) => {
     // Handle block range error gracefully - subscriptions will work for new events
-    if (error.message?.includes('exceed max block range')) {
+    const errorMsg = error?.message || String(error);
+    if (errorMsg.includes('exceed max block range') || 
+        errorMsg.includes('max block range params') || 
+        errorMsg.includes('InvalidInputRpcError')) {
       console.log('⚠️  Subscription setup: Block range limit hit (this is normal)');
       console.log('   Subscriptions will still work for new events going forward');
     } else {
-      console.error('❌ Failed to set up global subscription:', error.message);
+      console.error('❌ Failed to set up global subscription:', errorMsg);
     }
   });
 

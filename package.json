@@ -7,11 +7,14 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "start": "tsx src/index.ts",
+    "start": "node dist/omegle-stream-server.js",
+    "start:server": "node dist/server.js",
+    "start:index": "node dist/index.js",
     "server": "tsx watch src/server.ts",
     "omegle": "tsx watch src/omegle-server.ts",
     "stream": "tsx watch src/omegle-stream-server.ts",
-    "stream-demo": "tsx src/stream.ts"
+    "stream-demo": "tsx src/stream.ts",
+    "postinstall": "npm run build"
   },
   "keywords": [
     "arkiv",

@@ -8,6 +8,9 @@
  * - Query filtering
  */
 
+// Import error suppression first to suppress expected block range errors
+import '../suppress-errors.js';
+
 import { ArkivTaskBoard } from './arkiv-client.js';
 import { config } from './config.js';
 
