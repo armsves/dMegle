@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arkiv Omegle - Decentralized Video Chat</title>
+  <link rel="stylesheet" href="omegle.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎥 Arkiv Omegle</h1>
+      <p class="subtitle">Decentralized video chat powered by Arkiv</p>
+      <div class="status-bar">
+        <span id="connectionStatus" class="status-indicator">Connecting...</span>
+        <span id="userId" class="account-info"></span>
+      </div>
+    </header>
+
+    <div id="waitingScreen" class="screen active">
+      <div class="waiting-content">
+        <h2>Looking for someone to chat with...</h2>
+        <div class="interests-input">
+          <label>Interests (optional, comma-separated):</label>
+          <input type="text" id="interestsInput" placeholder="e.g. music, coding, gaming">
+        </div>
+        <button id="startWaitingBtn" class="btn btn-primary">Start Waiting</button>
+        <div id="waitingStatus" class="waiting-status"></div>
+        <div id="waitingUsers" class="waiting-users"></div>
+      </div>
+    </div>
+
+    <div id="chatScreen" class="screen">
+      <div class="video-container">
+        <div class="video-wrapper">
+          <video id="localVideo" autoplay muted playsinline></video>
+          <div class="video-label">You</div>
+        </div>
+        <div class="video-wrapper">
+          <video id="remoteVideo" autoplay playsinline></video>
+          <div class="video-label">Stranger</div>
+        </div>
+      </div>
+      <div class="chat-controls">
+        <button id="nextBtn" class="btn btn-secondary">Next</button>
+        <button id="endBtn" class="btn btn-danger">End Chat</button>
+      </div>
+      <div id="sessionInfo" class="session-info"></div>
+    </div>
+  </div>
+
+  <script src="omegle.js"></script>
+</body>
+</html>
+

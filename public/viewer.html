@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>dMegle - Watch Live Streams</title>
+  <link rel="stylesheet" href="viewer.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎥 dMegle</h1>
+      <p class="subtitle">Watch decentralized live streams</p>
+      <div class="status-bar">
+        <span id="connectionStatus" class="status-indicator">Connecting...</span>
+      </div>
+    </header>
+
+    <main>
+      <div class="card">
+        <h2>Watch Stream</h2>
+        <form id="watchForm">
+          <div class="form-group">
+            <label for="streamIdInput">Stream ID</label>
+            <input type="text" id="streamIdInput" required placeholder="Enter stream ID">
+            <small>Get the stream ID from the streamer</small>
+          </div>
+          <button type="submit" class="btn btn-primary">Start Watching</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Video Player</h2>
+        <div id="videoContainer" class="video-container">
+          <div class="empty-state">
+            <h3>No stream active</h3>
+            <p>Enter a stream ID and click "Start Watching"</p>
+          </div>
+        </div>
+        <div id="streamStats" class="stream-stats" style="display: none;">
+          <div class="stat-item">
+            <span class="stat-label">Chunks Received:</span>
+            <span id="chunkCount">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Stream Status:</span>
+            <span id="streamStatus">Waiting...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Chunk Log</h2>
+        <div id="chunkLog" class="chunk-log">
+          <p>Chunks will appear here as they're received...</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="viewer.js"></script>
+</body>
+</html>
+
